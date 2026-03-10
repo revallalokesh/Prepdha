@@ -6,14 +6,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sendDemoRequest } from '@/app/actions/send-demo-request';
-import { CheckCircle2, AlertCircle, Loader2, User, Building2, Mail, Phone, MessageSquare, ArrowRight } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Loader2, User, Building2, Mail, Phone, ArrowRight, Briefcase } from 'lucide-react';
 
 const schema = z.object({
-  name: z.string().min(2, 'Name is required'),
+  firstName: z.string().min(2, 'First name is required'),
+  lastName: z.string().min(2, 'Last name is required'),
   schoolName: z.string().min(3, 'School name is required'),
   email: z.string().email('Invalid email address'),
-  phone: z.string().min(10, 'Phone/WhatsApp number is required'),
-  message: z.string().optional(),
+  phone: z.string().min(10, 'Phone number is required'),
+  title: z.string().min(2, 'Job title is required'),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -53,8 +54,10 @@ export default function BookDemoPage() {
   });
 
   const fields = [
-    { id: 'name', label: 'Your Name', type: 'text', icon: User, required: true },
+    { id: 'firstName', label: 'First Name', type: 'text', icon: User, required: true },
+    { id: 'lastName', label: 'Last Name', type: 'text', icon: User, required: true },
     { id: 'schoolName', label: 'School Name', type: 'text', icon: Building2, required: true },
+    { id: 'title', label: 'Title', type: 'text', icon: Briefcase, required: true },
     { id: 'email', label: 'Email Address', type: 'email', icon: Mail, required: true },
     { id: 'phone', label: 'Phone / WhatsApp', type: 'tel', icon: Phone, required: true },
   ];
@@ -119,7 +122,6 @@ export default function BookDemoPage() {
         >
           <div className="bg-white/[0.03] backdrop-blur-3xl border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
 
-            {/* Decorative top border */}
             <div className="absolute top-0 left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
 
             <form onSubmit={onSubmit} className="space-y-5">
@@ -156,21 +158,6 @@ export default function BookDemoPage() {
                 ))}
               </div>
 
-              <div className="relative group">
-                <label htmlFor="message" className="block text-sm font-medium text-slate-400 mb-1.5 ml-1 flex items-center gap-1.5">
-                  <MessageSquare size={14} className="text-purple-400" />
-                  Questions or Preferred Time?
-                </label>
-                <textarea
-                  id="message"
-                  {...register('message')}
-                  rows={3}
-                  className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 hover:border-slate-600 rounded-xl text-white placeholder-slate-600 
-                                 focus:outline-none focus:ring-2 focus:ring-purple-500/40 transition-all duration-300 resize-none"
-                  placeholder="Tell us any specific requirements or when you're available..."
-                />
-              </div>
-
               <button
                 type="submit"
                 disabled={isPending}
@@ -200,8 +187,8 @@ export default function BookDemoPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   className={`mt-6 p-4 rounded-xl flex items-start gap-3 border ${serverState.success
-                      ? 'bg-green-500/10 border-green-500/20 text-green-300'
-                      : 'bg-red-500/10 border-red-500/20 text-red-300'
+                    ? 'bg-green-500/10 border-green-500/20 text-green-300'
+                    : 'bg-red-500/10 border-red-500/20 text-red-300'
                     }`}
                 >
                   {serverState.success ? (
