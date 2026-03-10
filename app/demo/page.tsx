@@ -1,3 +1,5 @@
+"use client";
+
 import { Component as RippleDemo } from "@/components/ui/ripple-button";
 import { ShinyButton } from "@/components/ui/shiny-button";
 
